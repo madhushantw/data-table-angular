@@ -1,0 +1,63 @@
+<div class="table-container">
+  <h1>Vue & Angular-First Test</h1>
+  <div class="sub-title">
+      <h2>Data table</h2>
+      <!-- <input class="search" [(ngModel)]="searchQuery" placeholder="Search..." (input)="debouncedSearch()" /> -->
+  </div>
+  <!-- <h2 *ngIf="loading">loading</h2> -->
+  <table class="data-table">
+
+    <thead class="data-table-header" >
+      <tr>
+        <th (click)="sortBy('id')">Id</th>
+        <th>Name</th>
+        <th (click)="sortBy('email')">Email</th>
+        <th>Body</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody class="data-table-body">
+      <tr class="table-data" *ngFor="let comment of paginatedComments">
+        <td class="id">{{comment.id}}</td>
+        <td>
+          <span *ngIf="!editing || editId !== comment.id">{{ comment.name }}</span>
+          <input *ngIf="editing && editId === comment.id" [(ngModel)]="editComment.name" />
+        </td>
+        <td>
+          <span *ngIf="!editing || editId !== comment.id">{{ comment.email }}</span>
+          <input *ngIf="editing && editId === comment.id" [(ngModel)]="editComment.email" />
+        </td>
+        <td>
+          <div class="comment-body">
+            <span *ngIf="!editing || editId !== comment.id">{{ comment.body }}</span>
+            <textarea *ngIf="editing && editId === comment.id" rows="6" [(ngModel)]="editComment.body"></textarea>
+          </div>
+        </td>
+        <td class="action-btn">
+          <button *ngIf="!editing || editId !== comment.id" (click)="startEdit(comment)"><ion-icon name="create-outline"></ion-icon></button>
+          <button *ngIf="editing && editId === comment.id" (click)="saveEdit()"><ion-icon name="save-outline"></ion-icon></button>
+          <button *ngIf="editing && editId === comment.id" (click)="cancelEdit()"><ion-icon name="close-outline"></ion-icon></button>
+          <button (click)="deleteComment(comment.id)"><ion-icon name="trash-sharp"></ion-icon></button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+  <div *ngIf="loading">Loading...</div>
+
+  <div class="paginator">
+    <div>
+      <label for="rowsPerPage">Rows per page:</label>
+      <select id="rowsPerPage" [(ngModel)]="rowsPerPage">
+        <option *ngFor="let option of rowsOptions" [value]="option">{{ option }}</option>
+      </select>
+    </div>
+    <div>
+      <button (click)="prevPage()" [disabled]="page === 1">Previous</button>
+      <span>Page {{ page }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="page === totalPages">Next</button>
+    </div>
+  </div>
+</div>
